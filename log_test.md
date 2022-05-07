@@ -20,6 +20,7 @@ Log activity of testing.
 [`29-Apr-22`](test/0429_01/)    Test MQTT using HiveMQCloud \
 [`29-Apr-22`](test/0429_02/)    Test nodered to receive message from ESP8266 via MQTT \
 [`07-Mei-22`](test/0507_01/)    Make `camera.py` to take picture with pizero camera \
+[`07-Mei-22`](test/0507_02/)    Make loop to run `main.py` from `fish-length-opencv` for every image captured \
 
 
 <br>
