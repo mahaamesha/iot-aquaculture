@@ -1,0 +1,2 @@
+- buat folder mirip nama file.ino
+- paste program file.ino ke dalamnya
