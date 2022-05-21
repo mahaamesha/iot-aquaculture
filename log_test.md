@@ -22,6 +22,7 @@ Log activity of testing.
 [`07-Mei-22`](test/0507_01/)    Make `camera.py` to take picture with pizero camera \
 [`07-Mei-22`](test/0507_02/)    Make loop to run `main.py` from `fish-length-opencv` for every image captured \
 [`11-Mei-22`](test/0511_01/)    Make program to send email contain photo from raspi \
+[`20-Mei-22`](test/0520_01/)    Fix sensor calibration: pH, turbidity, temperature \
 
 
 <br>

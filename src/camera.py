@@ -1,5 +1,12 @@
 from picamera import PiCamera
 from time import sleep
+import os
+
+# Delete all old files in path folder
+def empty_folder(path = 'fish-length-opencv/img/'):
+	for f in os.listdir(path):
+		os.remove(os.path.join(path, f))
+
 
 camera = PiCamera()
 
@@ -14,12 +21,15 @@ camera.image_effect = 'none'    # default 'none'
 camera.exposure_mode = 'sports' # default 'auto'
 camera.awb_mode = 'sunlight'    # default 'auto'
 
+
+empty_folder(path='fish-length-opencv/img')
+
+
 # To capture repeatedly until 5 repetition
-path = '../img_captured/'
 for i in range(5):
-    sleep(2)    # preview the camera for n secondsi
-    # save captured image as 0.jpg, 1.jpg, ..., 4.jpg
-    camera.capture(path + '%s.jpg' % i)
+	sleep(2)    # preview the camera for n secondsi
+	# save captured image as 0.jpg, 1.jpg, ..., 4.jpg
+	camera.capture(path + '%s.jpg' % i)
 camera.stop_preview()
 
-print( str('Run camera.py').ljust(37,'.') + str('Done').rjust(5,' '), end='\n\n' )
+print('Run camera.py ... Done' )
