@@ -1,5 +1,5 @@
 # IoT in Aquaculture
-by @mahaamesha
+by @mahaamesha, @AldianNurAzmar, @kemal
 
 In particular:
 - Water quality monitoring
