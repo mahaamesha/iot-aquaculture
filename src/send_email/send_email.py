@@ -18,7 +18,6 @@ msg['To'] = recever_email
 # Attach body of email
 html_path = 'src/send_email/body.html'
 body = open(html_path, 'r').read()
-#body = 'asdadad'
 part_text = MIMEText(body, 'html')
 msg.attach(part_text)
 
@@ -30,6 +29,7 @@ encoders.encode_base64(part_img)
 part_img.add_header('Content-Disposition', 'attachment', filename='final.jpg')
 msg.attach(part_img)
 
+# Send email
 try:
 	with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
 		smtp.ehlo()     #Identify ourselves with the mail server we are using. 
