@@ -2,7 +2,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
-import smtplib, os
+import smtplib
+import os
 
 recever_email = '10219084@mahasiswa.itb.ac.id'
 sender_email = 'maraspi084@gmail.com'
