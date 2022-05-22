@@ -1,1 +1,0 @@
-This folder is captured image from ../src/camera.py

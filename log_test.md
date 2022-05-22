@@ -23,6 +23,8 @@ Log activity of testing.
 [`07-Mei-22`](test/0507_02/)    Make loop to run `main.py` from `fish-length-opencv` for every image captured \
 [`11-Mei-22`](test/0511_01/)    Make program to send email contain photo from raspi \
 [`20-Mei-22`](test/0520_01/)    Fix sensor calibration: pH, turbidity, temperature \
+[`21-Mei-22`](src/send_email/)  Send email & make template email as html file. Template not dynamic yet. \
+
 
 
 <br>
