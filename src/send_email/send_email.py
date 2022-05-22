@@ -2,7 +2,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
-import smtplib
+import smtplib, os
 
 recever_email = '10219084@mahasiswa.itb.ac.id'
 sender_email = 'maraspi084@gmail.com'
@@ -16,7 +16,9 @@ msg['From'] = sender_email
 msg['To'] = recever_email
 
 # Attach body of email
-html_path = 'src/send_email/body.html'
+running_file_path = os.path.dirname(__file__)
+body_namefile = 'body.html'
+html_path = os.path.join( running_file_path, body_namefile)
 body = open(html_path, 'r').read()
 part_text = MIMEText(body, 'html')
 msg.attach(part_text)
