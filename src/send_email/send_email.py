@@ -16,16 +16,19 @@ msg['Subject'] = subject
 msg['From'] = sender_email
 msg['To'] = recever_email
 
-# Attach body of email
+# Get running-file's path --> /send_email/ folder
 running_file_path = os.path.dirname(__file__)
-body_namefile = 'body.html'
-html_path = os.path.join( running_file_path, body_namefile)
+
+# Attach body of email
+html_path = 'body.html'		# Relative to running_file_path
+html_path = os.path.join(running_file_path, html_path)
 body = open(html_path, 'r').read()
 part_text = MIMEText(body, 'html')
 msg.attach(part_text)
 
 # Attach image to email
-img_path = 'src/fish-length-opencv/imgcv/final.jpg'
+img_path = '../fish-length-opencv/imgcv/final.jpg'		# Relative to running_file_path
+img_path = os.path.join(running_file_path, img_path)
 part_img = MIMEBase('image', 'jpg')
 part_img.set_payload( open(img_path, 'rb').read() )
 encoders.encode_base64(part_img)
