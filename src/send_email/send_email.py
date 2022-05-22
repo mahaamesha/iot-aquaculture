@@ -43,5 +43,6 @@ try:
 		smtp.ehlo()     #Reidentify our connection as encrypted with the mail server
 		smtp.login(sender_email, sender_pass)
 		smtp.sendmail(sender_email, recever_email, msg.as_string())
+	print('Email has been sent')
 except:
 	print('Error: unable to send email')
