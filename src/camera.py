@@ -3,12 +3,12 @@ from time import sleep
 import os
 
 
-def set_target_path(path='img_captured/'):
+def set_target_path(path='../img_captured/'):
 #def set_target_path(path='../fish-length-opencv/img/'):
 	# projects/
 	# 	iot_aquaculture/
 	#		img_captured/	>> use this as test
-	#		camera.py
+	#		src/camera.py
 	#	fish-length-opencv/
 	#		img/			>> use this as final
 	working_path = os.path.dirname(__file__)	# Find path of this file
@@ -35,8 +35,8 @@ def main():
 	camera.awb_mode = 'sunlight'    # default 'auto'
 
 	# Delete old files in img/ folder
-	path = set_target_path(path='img_captured/')
-	#path = set_target_path(path='../fish-length-opencv/img/')
+	path = set_target_path(path='../img_captured/')
+	#path = set_target_path(path='../../fish-length-opencv/img/')
 	empty_folder(path=path)
 
 	# To capture repeatedly until n repetition
