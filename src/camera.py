@@ -7,10 +7,10 @@ def set_target_path(path='img_captured/'):
 #def set_target_path(path='../fish-length-opencv/img/'):
 	# projects/
 	# 	iot_aquaculture/
-	#		img_captured/
+	#		img_captured/	>> use this as test
 	#		camera.py
 	#	fish-length-opencv/
-	#		img/
+	#		img/			>> use this as final
 	working_path = os.path.dirname(__file__)	# Find path of this file
 	path = os.path.join(working_path, path)		# I want to save the captured img in this path
 	return path
@@ -39,8 +39,8 @@ def main():
 	#path = set_target_path(path='../fish-length-opencv/img/')
 	empty_folder(path=path)
 
-	# To capture repeatedly until 5 repetition
-	for i in range(5):
+	# To capture repeatedly until n repetition
+	for i in range(3):
 		sleep(2)    # preview the camera for n secondsi
 		# save captured image as 0.jpg, 1.jpg, ..., 4.jpg
 		camera.capture(path + '%s.jpg' % i)
