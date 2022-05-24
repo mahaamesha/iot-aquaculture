@@ -47,8 +47,8 @@ def main():
 		camera.capture(path + '%s.jpg' % i)
 	camera.stop_preview()
 
-	print('Run camera.py ... Done' )
-
 
 if __name__ == '__main__':
+	print('Run camera.py ... ', end='')
 	main()
+	print('Done')
