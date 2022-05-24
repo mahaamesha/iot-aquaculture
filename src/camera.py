@@ -49,5 +49,5 @@ def main():
 	print('Run camera.py ... Done' )
 
 
-if __file__ == '__main__':
+if __name__ == '__main__':
 	main()
