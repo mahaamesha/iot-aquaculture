@@ -1,0 +1,138 @@
+[
+    {
+        "id": "8ebedd7c7a24dd54",
+        "type": "influxdb out",
+        "z": "3244455b14766eae",
+        "influxdb": "8b9eaf51e949e6ef",
+        "name": "",
+        "measurement": "temperature",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 520,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "1adc182a10619657",
+        "type": "mqtt in",
+        "z": "3244455b14766eae",
+        "name": "",
+        "topic": "AvimaOut",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "35299a07402c88ad",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 120,
+        "y": 660,
+        "wires": [
+            [
+                "c087fb352ed748a8",
+                "0d3d79f1db27a757"
+            ]
+        ]
+    },
+    {
+        "id": "c087fb352ed748a8",
+        "type": "function",
+        "z": "3244455b14766eae",
+        "name": "",
+        "func": "var data = msg.payload;\nvar arr_data = data.split(',');\nvar temp = parseFloat(arr_data[0]);\n\nmsg.payload = temp;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 660,
+        "wires": [
+            [
+                "8ebedd7c7a24dd54"
+            ]
+        ]
+    },
+    {
+        "id": "0d3d79f1db27a757",
+        "type": "function",
+        "z": "3244455b14766eae",
+        "name": "",
+        "func": "var data = msg.payload;\nvar arr_data = data.split(',');\nvar humd = parseFloat(arr_data[1]);\n\nmsg.payload = humd;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 700,
+        "wires": [
+            [
+                "f739485569667b1e"
+            ]
+        ]
+    },
+    {
+        "id": "f739485569667b1e",
+        "type": "influxdb out",
+        "z": "3244455b14766eae",
+        "influxdb": "8b9eaf51e949e6ef",
+        "name": "",
+        "measurement": "humidity",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 510,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "8b9eaf51e949e6ef",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "mytest",
+        "name": "",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x",
+        "url": "http://localhost:8086",
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "35299a07402c88ad",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "test.mosquitto.org",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    }
+]
