@@ -1,11 +1,11 @@
 {
     "temperature":{
-        "value": 30
+        "value": "__value__"
     },
     "pH":{
-        "value": 30
+        "value": "__value__"
     },
     "turbidity":{
-        "value": 30
+        "value": "__value__"
     }
 }
