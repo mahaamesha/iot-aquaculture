@@ -1,0 +1,14 @@
+{
+    "temperature":{
+        "upper": 30,
+        "lower": 25
+    },
+    "pH":{
+        "upper": 8,
+        "lower": 6.5
+    },
+    "turbidity":{
+        "upper": 50,
+        "lower": 0
+    }
+}
