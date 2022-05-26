@@ -42,6 +42,45 @@
         "color": "#DDAA99"
     },
     {
+        "id": "7a41ed18e2f9d323",
+        "type": "subflow",
+        "name": "sub3",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 200,
+                "wires": [
+                    {
+                        "id": "e48e9668ea111bcc"
+                    },
+                    {
+                        "id": "9ac1fc63e7c8dbb1"
+                    },
+                    {
+                        "id": "da9cf87fac1b3b6c"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 360,
+                "y": 680,
+                "wires": [
+                    {
+                        "id": "66d004be3f6becb9",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
         "id": "1d413aa81ba2085f",
         "type": "mqtt-broker",
         "name": "HiveMQ Cloud",
@@ -136,8 +175,8 @@
         "id": "5f9fc934a58d1b2f",
         "type": "mqtt in",
         "z": "9ed50aa2a15971b2",
-        "name": "water_quality",
-        "topic": "ourSensorOut/water_quality",
+        "name": "",
+        "topic": "ourSensorOut",
         "qos": "2",
         "datatype": "auto",
         "broker": "35299a07402c88ad",
@@ -671,6 +710,411 @@
         "wires": []
     },
     {
+        "id": "aad7cb0cdcf553bf",
+        "type": "function",
+        "z": "7a41ed18e2f9d323",
+        "name": "avg()",
+        "func": "var data = msg.payload;\nvar length = data.length;\nvar sum = 0;\nfor (var i = 0; i < length; i++) {\n    sum += data[i].value;\n}\n\nvar rerata = sum / length;\nmsg.topic = 'avg_temperature';\nmsg.payload = rerata;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 160,
+        "wires": [
+            [
+                "bdd5e6044f3e3304"
+            ]
+        ]
+    },
+    {
+        "id": "ed5117b97d1dc739",
+        "type": "function",
+        "z": "7a41ed18e2f9d323",
+        "name": "avg()",
+        "func": "var data = msg.payload;\nvar length = data.length;\nvar sum = 0;\nfor (var i = 0; i < length; i++) {\n    sum += data[i].value;\n}\n\nvar rerata = sum / length;\nmsg.topic = 'avg_pH';\nmsg.payload = rerata;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 200,
+        "wires": [
+            [
+                "bdd5e6044f3e3304"
+            ]
+        ]
+    },
+    {
+        "id": "bdd5e6044f3e3304",
+        "type": "join",
+        "z": "7a41ed18e2f9d323",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "3",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "num",
+        "reduceFixup": "",
+        "x": 570,
+        "y": 200,
+        "wires": [
+            [
+                "8e070c9a018608f9"
+            ]
+        ]
+    },
+    {
+        "id": "c075788263d9029a",
+        "type": "change",
+        "z": "7a41ed18e2f9d323",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "avg_last5m",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 430,
+        "y": 380,
+        "wires": [
+            [
+                "00173d0b2341ac9f"
+            ]
+        ]
+    },
+    {
+        "id": "8e070c9a018608f9",
+        "type": "link out",
+        "z": "7a41ed18e2f9d323",
+        "name": "",
+        "mode": "link",
+        "links": [
+            "938410b977e51fed",
+            "73923463a8608750"
+        ],
+        "x": 665,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "4f49e6d967f57725",
+        "type": "file in",
+        "z": "7a41ed18e2f9d323",
+        "name": "read limit.json",
+        "filename": "/home/ma-pi/_myProjects/iot-aquaculture/tmp/limit.json",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 200,
+        "y": 440,
+        "wires": [
+            [
+                "4e08c39a9b904599"
+            ]
+        ]
+    },
+    {
+        "id": "4e08c39a9b904599",
+        "type": "json",
+        "z": "7a41ed18e2f9d323",
+        "name": "limit object",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 190,
+        "y": 480,
+        "wires": [
+            [
+                "efec70b30781de51"
+            ]
+        ]
+    },
+    {
+        "id": "efec70b30781de51",
+        "type": "change",
+        "z": "7a41ed18e2f9d323",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "limit",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 430,
+        "y": 480,
+        "wires": [
+            [
+                "00173d0b2341ac9f"
+            ]
+        ]
+    },
+    {
+        "id": "00173d0b2341ac9f",
+        "type": "join",
+        "z": "7a41ed18e2f9d323",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 610,
+        "y": 420,
+        "wires": [
+            [
+                "66143280e9f9a3d0"
+            ]
+        ]
+    },
+    {
+        "id": "66143280e9f9a3d0",
+        "type": "link out",
+        "z": "7a41ed18e2f9d323",
+        "name": "",
+        "mode": "link",
+        "links": [
+            "e8a727a9b065622d"
+        ],
+        "x": 705,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "e8a727a9b065622d",
+        "type": "link in",
+        "z": "7a41ed18e2f9d323",
+        "name": "",
+        "links": [
+            "66143280e9f9a3d0"
+        ],
+        "x": 55,
+        "y": 620,
+        "wires": [
+            [
+                "66d004be3f6becb9"
+            ]
+        ]
+    },
+    {
+        "id": "7f716f9ccd865a37",
+        "type": "comment",
+        "z": "7a41ed18e2f9d323",
+        "name": "Get Average of Last 5min",
+        "info": "",
+        "x": 150,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "73923463a8608750",
+        "type": "link in",
+        "z": "7a41ed18e2f9d323",
+        "name": "",
+        "links": [
+            "8e070c9a018608f9"
+        ],
+        "x": 55,
+        "y": 380,
+        "wires": [
+            [
+                "5d72602e0ef91501",
+                "4f49e6d967f57725"
+            ]
+        ]
+    },
+    {
+        "id": "5d72602e0ef91501",
+        "type": "function",
+        "z": "7a41ed18e2f9d323",
+        "name": "avg_last5m_object()",
+        "func": "// Store avg_last_5min\n// I create the structure similar to limit.json\n\nvar data = msg.payload;\nvar obj = {\n    \"temperature\": {\n        \"value\": data.avg_temperature\n    },\n    \"pH\": {\n        \"value\": data.avg_pH\n    },\n    \"turbidity\": {\n        \"value\": data.avg_turbidity\n    }\n};\n\nmsg.payload = obj;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 220,
+        "y": 380,
+        "wires": [
+            [
+                "c075788263d9029a"
+            ]
+        ]
+    },
+    {
+        "id": "2e3fdc68fa84d054",
+        "type": "comment",
+        "z": "7a41ed18e2f9d323",
+        "name": "Create Object",
+        "info": "",
+        "x": 110,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "e4c53ee5f6d1f43c",
+        "type": "comment",
+        "z": "7a41ed18e2f9d323",
+        "name": "Check Limit (1: out of limit range)",
+        "info": "",
+        "x": 170,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "66d004be3f6becb9",
+        "type": "function",
+        "z": "7a41ed18e2f9d323",
+        "name": "check_limit()",
+        "func": "var obj = msg.payload;\n\nfunction check_limit(obj){\n    const keys = Object.keys(obj);\n    const measurements = Object.keys( obj[keys[0]] );\n\n    for (var i=0; i < keys.length; i++ ){\n        var value = obj[keys[0]][measurements[i]]['value'];\n        var upper = obj[keys[1]][measurements[i]]['upper'];\n        var lower = obj[keys[1]][measurements[i]]['lower'];\n\n        if (value < lower || value > upper){\n            return 1;    // out of limit range\n        }\n    }\n    \n    return 0;    // in limit range\n}\n\nmsg.payload = check_limit(obj);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 190,
+        "y": 620,
+        "wires": [
+            [
+                "5dc4faf325facd17"
+            ]
+        ]
+    },
+    {
+        "id": "e48e9668ea111bcc",
+        "type": "influxdb in",
+        "z": "7a41ed18e2f9d323",
+        "influxdb": "766bd7a5386acf81",
+        "name": "avg_temperature in last 5m",
+        "query": "SELECT * FROM temperature WHERE time > now() - 5m",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "organisation",
+        "x": 240,
+        "y": 160,
+        "wires": [
+            [
+                "aad7cb0cdcf553bf"
+            ]
+        ]
+    },
+    {
+        "id": "da9cf87fac1b3b6c",
+        "type": "influxdb in",
+        "z": "7a41ed18e2f9d323",
+        "influxdb": "766bd7a5386acf81",
+        "name": "avg_turbidity in last 5m",
+        "query": "SELECT * FROM turbidity WHERE time > now() - 5m",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "organisation",
+        "x": 220,
+        "y": 240,
+        "wires": [
+            [
+                "4af7540951714a51"
+            ]
+        ]
+    },
+    {
+        "id": "9ac1fc63e7c8dbb1",
+        "type": "influxdb in",
+        "z": "7a41ed18e2f9d323",
+        "influxdb": "766bd7a5386acf81",
+        "name": "avg_pH in last 5m",
+        "query": "SELECT * FROM pH WHERE time > now() - 5m",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "organisation",
+        "x": 210,
+        "y": 200,
+        "wires": [
+            [
+                "ed5117b97d1dc739"
+            ]
+        ]
+    },
+    {
+        "id": "4af7540951714a51",
+        "type": "function",
+        "z": "7a41ed18e2f9d323",
+        "name": "avg()",
+        "func": "var data = msg.payload;\nvar length = data.length;\nvar sum = 0;\nfor (var i = 0; i < length; i++) {\n    sum += data[i].value;\n}\n\nvar rerata = sum / length;\nmsg.topic = 'avg_turbidity';\nmsg.payload = rerata;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 240,
+        "wires": [
+            [
+                "bdd5e6044f3e3304"
+            ]
+        ]
+    },
+    {
+        "id": "5dc4faf325facd17",
+        "type": "mqtt out",
+        "z": "7a41ed18e2f9d323",
+        "name": "",
+        "topic": "ourSensorIn",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "35299a07402c88ad",
+        "x": 410,
+        "y": 620,
+        "wires": []
+    },
+    {
         "id": "d52b3abffc66bae0",
         "type": "subflow:9ed50aa2a15971b2",
         "z": "3244455b14766eae",
@@ -752,6 +1196,74 @@
         "statusType": "auto",
         "x": 370,
         "y": 400,
+        "wires": []
+    },
+    {
+        "id": "dd6343f69edc90c7",
+        "type": "subflow:7a41ed18e2f9d323",
+        "z": "3244455b14766eae",
+        "name": "",
+        "x": 310,
+        "y": 540,
+        "wires": [
+            [
+                "b20fa9cde4ac6a2b"
+            ]
+        ]
+    },
+    {
+        "id": "653244f19ac925c0",
+        "type": "inject",
+        "z": "3244455b14766eae",
+        "name": "interval 5s",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 540,
+        "wires": [
+            [
+                "dd6343f69edc90c7"
+            ]
+        ]
+    },
+    {
+        "id": "0f7a90b97922ac8e",
+        "type": "comment",
+        "z": "3244455b14766eae",
+        "name": "Check Data in Last 5 Minutes (1: out of limit range)",
+        "info": "Return 1 if value out of limit range.",
+        "x": 250,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "b20fa9cde4ac6a2b",
+        "type": "debug",
+        "z": "3244455b14766eae",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 470,
+        "y": 540,
         "wires": []
     }
 ]
