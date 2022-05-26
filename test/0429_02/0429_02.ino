@@ -24,7 +24,7 @@
 
 // Update these with values suitable for your network.
 
-const char* ssid = "Wi-Fu";
+const char* ssid = "Wi-Fe";
 const char* password = "gorill4a";
 const char* mqtt_server = "test.mosquitto.org";
 
