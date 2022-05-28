@@ -21,7 +21,7 @@ def empty_folder(path):
 	for f in os.listdir(path):
 		os.remove(os.path.join(path, f))
 
-def main():
+def main(isTest=False):
 	camera = PiCamera()
 
 	camera.rotation = 0     # Rotatae: 0, 90, 180, 270
@@ -37,8 +37,10 @@ def main():
 	camera.CAPTURE_TIMEOUT = 30 # seconds
 
 	# Delete old files in img/ folder
-	path = set_target_path(path='img_captured/')
-	#path = set_target_path(path='../fish-length-opencv/img/')
+	if isTest:
+		path = set_target_path(path='img_captured/')
+	else:
+		path = set_target_path(path='../fish-length-opencv/img/')
 	empty_folder(path=path)
 
 	# To capture repeatedly until n repetition
@@ -51,5 +53,5 @@ def main():
 
 if __name__ == '__main__':
 	print('Run camera.py ... ', end='')
-	main()
+	main(isTest=True)
 	print('Done')
