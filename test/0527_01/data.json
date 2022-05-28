@@ -1,0 +1,14 @@
+{
+		"temperature":{
+				"value": 28,
+				"unit": "°C"
+		},
+		"pH":{
+				"value": 7,
+				"unit": ""
+		},
+		"turbidity":{
+				"value": 70,
+				"unit": "NTU"
+		}
+}

@@ -1,0 +1,7 @@
+{
+    "temperature": "__value__",
+    "pH": "__value__",
+    "turbidity": "__value__",
+    "num_fish": "__value__",
+    "fishlength": "__value__"
+}
