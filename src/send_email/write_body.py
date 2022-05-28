@@ -1,5 +1,6 @@
 import os
 import json
+import sys
 
 
 # Replace value in send_email/data_email.json based on tmp/data.json
@@ -25,28 +26,36 @@ def send_datajson_to_dataemailjson():
 
 
 # Save parameter value in send_email/data_email.json into new variable
-def save_dataemailjson_to_variable():
+def save_dataemailjson_to_variable(dict_param):
     working_path = os.path.dirname(__file__)
     path = os.path.join(working_path, 'data_email.json')
-    
     with open(path, 'r') as f:
         data = json.load(f)
-        arr_param = [i for i in range(len(data))]
-        i = 0
         for key in data.keys():
-            arr_param[i] = data[key]
-            i += 1
+            dict_param.update( {key: data[key]} )
     
-    return arr_param
+    return dict_param
 
 
-# Use arr_param, then use it in template, return body_html as a string
-def template(arr_param):
-    temperature = arr_param[0]
-    pH = arr_param[1]
-    turbidity = arr_param[2]
-    num_fish = arr_param[3]
-    fishlength = arr_param[4]
+# Get msg.payload from nodered, then replace value of num_fish & fishlength in dict_param
+def save_msgpayload_to_variable(dict_param):
+    str_payload = sys.argv[1]
+    obj = json.loads(str_payload)
+
+    for key in obj.keys():
+        dict_param[key] = obj[key]
+    
+    return dict_param
+
+
+
+# Use dict_param, then use it in template, return body_html as a string
+def template(dict_param):
+    temperature = dict_param[0]
+    pH = dict_param[1]
+    turbidity = dict_param[2]
+    num_fish = dict_param[3]
+    fishlength = dict_param[4]
 
     body = """\
     <!DOCTYPE html>
@@ -104,11 +113,14 @@ if __name__ == '__main__':
     # Replace value in send_email/data_email.json based on tmp/data.json
     send_datajson_to_dataemailjson()
     
+    param = {}
     # Save parameter value in send_email/data_email.json into new variable
-    param = save_dataemailjson_to_variable()
+    param = save_dataemailjson_to_variable(dict_param=param)
+    # Get msg.payload from nodered, then replace value of num_fish & fishlength in dict_param
+    param = save_msgpayload_to_variable(dict_param=param)
 
-    # Use arr_param, then use it in template, return body_html as a string
-    body = template(arr_param=param)
+    # Use dict_param, then use it in template, return body_html as a string
+    body = template(dict_param=param)
 
     # Overwrite send_email/body.html from string body_html
     make_body_html(body_html=body)
