@@ -23,4 +23,4 @@ def clean(list_dir=target, isLinux=True):
 	print('Delete target directory ... Done')
 
 if __name__ == '__main__':
-	clean(isLinux=False)
+	clean(isLinux=True)
