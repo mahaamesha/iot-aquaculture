@@ -51,11 +51,7 @@ def save_msgpayload_to_variable(dict_param):
 
 # Use dict_param, then use it in template, return body_html as a string
 def template(dict_param):
-    temperature = dict_param[0]
-    pH = dict_param[1]
-    turbidity = dict_param[2]
-    num_fish = dict_param[3]
-    fishlength = dict_param[4]
+    p = dict_param
 
     body = """\
     <!DOCTYPE html>
@@ -94,7 +90,7 @@ def template(dict_param):
             </p>
         </body>
     </html>
-    """ %(temperature, pH, turbidity, num_fish, fishlength)
+    """ %(p['temperature'], p['pH'], p['turbidity'], p['num_fish'], p['fishlength'])
 
     return body
 
