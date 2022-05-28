@@ -5,7 +5,7 @@ from email import encoders
 import smtplib
 import os
 
-def main():
+def main(isTest=False):
 	recever_email = '10219084@mahasiswa.itb.ac.id'
 	sender_email = 'maraspi084@gmail.com'
 	sender_pass = 'EsVd4A72_nhi7m!'
@@ -28,8 +28,10 @@ def main():
 	msg.attach(part_text)
 
 	# Attach image to email
-	#img_path = '../fish-length-opencv/imgcv/final.jpg'	# relative from path of this file
-	img_path = 'img_captured/0.jpg'
+	if isTest:
+		img_path = '../fish-length-opencv/imgcv/final.jpg'	# relative from path of this file
+	else:
+		img_path = 'img_captured/0.jpg'
 	img_path = os.path.join(project_path, img_path)
 	part_img = MIMEBase('image', 'jpg')
 	part_img.set_payload( open(img_path, 'rb').read() )
@@ -52,4 +54,4 @@ def main():
 
 if __name__ == '__main__':
 	print('Sending email ...')
-	main()
+	main(isTest=True)

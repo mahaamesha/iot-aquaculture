@@ -49,9 +49,10 @@ def main(isTest=False):
 		# save captured image as 0.jpg, 1.jpg, ..., 4.jpg
 		camera.capture(path + '%s.jpg' % i)
 	camera.stop_preview()
+	print('Done')
+	print('Image captured to %s' %path)
 
 
 if __name__ == '__main__':
 	print('Run camera.py ... ', end='')
 	main(isTest=True)
-	print('Done')
