@@ -1,7 +1,7 @@
 {
-    "temperature": 25,
-    "pH": 7,
-    "turbidity": 60,
-    "num_fish": "__value__",
-    "fishlength": "__value__"
+    "temperature": null,
+    "pH": null,
+    "turbidity": null,
+    "num_fish": null,
+    "fishlength": null
 }

@@ -105,8 +105,10 @@ void reconnect() {
       Serial.println("connected");
       // Once connected, publish an announcement...
       client.publish("AvimaOut", "Hello World !!!");
+      client.publish("ourSensorOut", "Hello World !!!");
       // ... and resubscribe
       client.subscribe("AvimaOut");   //only for checking that the message has been received
+      client.subscribe("ourSensorOut");
       client.subscribe("KemalIn");
       client.subscribe("AldianIn");
     } else {
@@ -158,7 +160,8 @@ void loop() {
   if (Serial.available() > 1){
     String str = Serial.readStringUntil('#');
     Serial.println(str);
-    client.publish("AvimaOut", str.c_str());  
+    client.publish("AvimaOut", str.c_str());
+    client.publish("ourSensorOut", str.c_str());
   }
 
 //  unsigned long now = millis();
@@ -176,8 +179,9 @@ void loop() {
       lastupdate = waktu;
       // format msg.payload --> 00.00,00.00 --> temperature,humidity
       // temperature in Celcius, humidity in %
-      String msg = String(t) + "," + String(h);
+      String msg = String(t) + "," + String(7) + "," + String(h);
       client.publish("AvimaOut", msg.c_str());
+      client.publish("ourSensorOut", msg.c_str());
     }
      
 }
