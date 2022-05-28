@@ -55,4 +55,4 @@ def main(isTest=False):
 
 if __name__ == '__main__':
 	print('Run camera.py ... ', end='')
-	main(isTest=True)
+	main(isTest=False)
