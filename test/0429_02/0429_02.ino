@@ -108,6 +108,7 @@ void reconnect() {
       client.publish("ourSensorOut", "Hello World !!!");
       // ... and resubscribe
       client.subscribe("AvimaOut");   //only for checking that the message has been received
+      client.subscribe("ourSensorOut"); //only for checking that the message has been received
       client.subscribe("ourSensorIn");
     } else {
       Serial.print("failed, rc=");
