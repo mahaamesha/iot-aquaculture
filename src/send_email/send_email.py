@@ -55,4 +55,4 @@ def main(isTest=False):
 
 if __name__ == '__main__':
 	print('Sending email ...')
-	main(isTest=True)
+	main(isTest=False)
