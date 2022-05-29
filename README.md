@@ -54,6 +54,18 @@ Note here.
         main(isTest=False)
     ```
 
+- Tips:\
+    Remove old folder
+    ```
+    rm -rf fish-length-opencv/ iot-aquaculture/
+    ```
+    
+    Clone projects from GitHub repository
+    ```
+    git clone https://github.com/mahaamesha/fish-length-opencv.git && git clone https://github.com/mahaamesha/iot-aquaculture.git
+    ```
+
+
 <br/>
 <br/>
 
