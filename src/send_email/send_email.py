@@ -29,10 +29,10 @@ def main(isTest=False):
 
 	# Attach image to email
 	if isTest:
-		img_path = 'img_captured/0.jpg'
+		img_path = 'img_captured/1.jpg'
 	else:
 		img_path = '../fish-length-opencv/imgcv/final.jpg'	# relative from path of this file
-		
+
 	img_path = os.path.join(project_path, img_path)
 	part_img = MIMEBase('image', 'jpg')
 	part_img.set_payload( open(img_path, 'rb').read() )
@@ -55,4 +55,4 @@ def main(isTest=False):
 
 if __name__ == '__main__':
 	print('Sending email ...')
-	main(isTest=False)
+	main(isTest=True)
