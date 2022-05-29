@@ -34,7 +34,6 @@ def main(isTest=False):
 	camera.image_effect = 'none'    # default 'none'
 	camera.exposure_mode = 'sports' # default 'auto'
 	camera.awb_mode = 'sunlight'    # default 'auto'
-	camera.CAPTURE_TIMEOUT = 30 # seconds
 
 	# Delete old files in img/ folder
 	if isTest:
