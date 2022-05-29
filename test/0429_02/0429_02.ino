@@ -108,9 +108,7 @@ void reconnect() {
       client.publish("ourSensorOut", "Hello World !!!");
       // ... and resubscribe
       client.subscribe("AvimaOut");   //only for checking that the message has been received
-      client.subscribe("ourSensorOut");
-      client.subscribe("KemalIn");
-      client.subscribe("AldianIn");
+      client.subscribe("ourSensorIn");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -163,16 +161,6 @@ void loop() {
     client.publish("AvimaOut", str.c_str());
     client.publish("ourSensorOut", str.c_str());
   }
-
-//  unsigned long now = millis();
-//  if (now - lastMsg > 2000) {
-//    lastMsg = now;
-//    ++value;
-//    snprintf (msg, MSG_BUFFER_SIZE, "hello I'm Shafira #%ld", value);
-//    Serial.print("Publish message: ");
-//    Serial.println(msg);
-//    client.publish("ShafiraOut", msg);
-//  }
 
     long waktu = millis();
     if (waktu-lastupdate > 5000){
