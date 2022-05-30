@@ -21,8 +21,21 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-// Update these with values suitable for your network.
+// ds18b20
+#include <OneWire.h>
+#include <DallasTemperature.h>
+OneWire wiring(6);
+DallasTemperature sensor(&wiring);
 
+// pH4502c
+int pHSense = A0;
+int samples = 10;
+float adc_resolution = 1024.0;
+
+// turbidity sensor
+int sensorPin = A0;
+
+// Update these with values suitable for your network.
 const char* ssid = "Wi-Fe";
 const char* password = "gorill4a";
 const char* mqtt_server = "test.mosquitto.org";
@@ -34,6 +47,60 @@ unsigned long lastMsg = 0;
 char msg[MSG_BUFFER_SIZE];
 int value = 0;
 
+
+// Function temperature
+float read_temperature() {
+  sensor.setResolution(9);
+  sensor.requestTemperatures();
+  float dataSuhu = sensor.getTempCByIndex(0);
+  
+  return dataSuhu;
+}
+// (END) Function temperature
+
+
+// Function pH
+float read_pH() {
+  int measuring = 0;
+
+  for(int i=0;i<samples;i++){
+    measuring += analogRead(pHSense);	// pin pHSense in void setup()
+    delay(10);
+  }
+
+  float voltage = 5/adc_resolution*measuring/samples;
+  float pH = 16.15 + ((2.5 - voltage)/0.18);
+  
+  return pH;
+}
+// (END) Function pH
+
+
+// Function turbidity
+float round_to_dp( float in_value, int decimal_place ) {
+  float multiplier = powf( 10.0f, decimal_place );
+  in_value = roundf( in_value * multiplier ) / multiplier;
+  return in_value;
+}
+
+float read_turbidity() {
+  float volt = 0;
+  float ntu = 0;
+  
+  for(int i=0; i<800; i++) {
+    volt += ((float)analogRead(sensorPin)/1023)*5;
+  }
+  volt = volt/800;
+  volt = round_to_dp(volt,2);
+  if(volt < 2.5) {
+	ntu = 3000;
+  } else {
+	ntu = -1120.4 * volt*volt + 5742.3 * volt - 4352.9; 
+  }
+}
+// (END) Function turbidity
+
+// Function MQTT
 void setup_wifi() {
   delay(10);
   // We start by connecting to a WiFi network
@@ -101,6 +168,8 @@ void reconnect() {
     }
   }
 }
+// Function MQTT
+
 
 void setup() {
   pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
@@ -108,6 +177,9 @@ void setup() {
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
+
+  // ph4502c
+  pinMode(pHSense, INPUT);
 }
 
 void loop() {
