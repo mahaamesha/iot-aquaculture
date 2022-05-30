@@ -195,16 +195,10 @@ void loop() {
   unsigned long now = millis();
   if (now - lastMsg > 2000) {
     lastMsg = now;
-    Serial.print("Publish message: ");
-    Serial.println(msg);
 
-	//float temperature = read_temperature();
-	//float pH = read_pH();
-	//float turbidity = read_turbidity();
-
-	float temperature = 24;
-	float pH = 6;
-	float turbidity = 45;
+	float temperature = read_temperature();
+	float pH = read_pH();
+	float turbidity = read_turbidity();
 
 	String message = String(temperature) + "," + String(pH) + "," + String(turbidity);
     client.publish("ourSensorOut", message.c_str());
