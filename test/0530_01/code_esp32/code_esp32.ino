@@ -23,9 +23,9 @@
 
 // Update these with values suitable for your network.
 
-const char* ssid = "Pondok9_1";
-const char* password = "joey*2015";
-const char* mqtt_server = "broker.mqtt-dashboard.com";
+const char* ssid = "Wi-Fe";
+const char* password = "gorill4a";
+const char* mqtt_server = "test.mosquitto.org";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -35,7 +35,6 @@ char msg[MSG_BUFFER_SIZE];
 int value = 0;
 
 void setup_wifi() {
-
   delay(10);
   // We start by connecting to a WiFi network
   Serial.println();
@@ -89,12 +88,10 @@ void reconnect() {
     if (client.connect(clientId.c_str())) {
       Serial.println("connected");
       // Once connected, publish an announcement...
-      client.publish("AvimaOut_esp32", "hello world by ESP32");
+      client.publish("ourSensorOut", "Hello World !!!");
       // ... and resubscribe
-      client.subscribe("AvimaOut"); // from esp8266
-      client.subscribe("AldiOut");
-      client.subscribe("KemalOut");
-      client.subscribe("IniAul");
+      client.subscribe("ourSensorOut"); //only for checking that the message has been received
+      client.subscribe("ourSensorIn");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -114,7 +111,8 @@ void setup() {
 }
 
 void loop() {
-
+  
+  // MQTT
   if (!client.connected()) {
     reconnect();
   }
@@ -127,6 +125,8 @@ void loop() {
     snprintf (msg, MSG_BUFFER_SIZE, "Avima 2 berhasil #%ld", value);
     Serial.print("Publish message: ");
     Serial.println(msg);
-    client.publish("AvimaOut_esp32", msg);
+	String message = String(25) + "," + String(7) + "," + String(45);
+    client.publish("ourSensorOut", message.c_str());
   }
+  // (END) MQTT
 }

@@ -160,13 +160,13 @@ void loop() {
     client.publish("ourSensorOut", str.c_str());
   }
 
-    long waktu = millis();
-    if (waktu-lastupdate > 5000){
-      lastupdate = waktu;
-      // format msg.payload --> 00.00,00.00 --> temperature,humidity
-      // temperature in Celcius, humidity in %
-      String msg = String(t) + "," + String(7) + "," + String(h);
-      client.publish("ourSensorOut", msg.c_str());
-    }
+  long waktu = millis();
+  if (waktu-lastupdate > 5000){
+    lastupdate = waktu;
+    // format msg.payload --> 00.00,00.00 --> temperature,humidity
+    // temperature in Celcius, humidity in %
+    String msg = String(t) + "," + String(7) + "," + String(h);
+    client.publish("ourSensorOut", msg.c_str());
+  }
      
 }
