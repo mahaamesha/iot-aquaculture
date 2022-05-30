@@ -97,6 +97,8 @@ float read_turbidity() {
   } else {
 	ntu = -1120.4 * volt*volt + 5742.3 * volt - 4352.9; 
   }
+  
+  return ntu;
 }
 // (END) Function turbidity
 
@@ -182,8 +184,7 @@ void setup() {
   pinMode(pHSense, INPUT);
 }
 
-void loop() {
-  
+void loop() {  
   // MQTT
   if (!client.connected()) {
     reconnect();
@@ -197,7 +198,12 @@ void loop() {
     snprintf (msg, MSG_BUFFER_SIZE, "Avima 2 berhasil #%ld", value);
     Serial.print("Publish message: ");
     Serial.println(msg);
-	String message = String(25) + "," + String(7) + "," + String(45);
+
+	float temperature = read_temperature();
+	float pH = read_pH();
+	float turbidity = read_turbidity();
+	
+	String message = String(temperature) + "," + String(pH) + "," + String(turbidity);
     client.publish("ourSensorOut", message.c_str());
   }
   // (END) MQTT
