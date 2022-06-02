@@ -100,13 +100,9 @@ float read_turbidity() {
 	if(volt < 2.5) {
 		ntu = 3000;
 	}
-	//else if ((volt > 2.5 && volt < 4.2)) {
 	else {
 		ntu = -1120.4 * volt*volt + 5742.3 * volt - 4352.9; 
 	}
-	//else {
-		//ntu = 0;
-	//}
 	
 	return ntu;
 }
@@ -148,12 +144,14 @@ void callback(char* topic, byte* payload, unsigned int length) {
 	if (String(topic) == String("ourSensorIn")) {
 		// if value is out of limit range, turn on actuator
 		if ((char)payload[0] == '1') {
-			digitalWrite(ACTUATOR_PIN, HIGH);
+			digitalWrite(ACTUATOR_PIN, LOW);
+			digitalWrite(BUILTIN_LED, HIGH);
 			Serial.println(" >> Turn on actuator");
 		}
 		// if value is in limit range, turn off actuator
 		else if ((char)payload[0] == '0') {
-			digitalWrite(ACTUATOR_PIN, LOW);
+			digitalWrite(ACTUATOR_PIN, HIGH);
+			digitalWrite(BUILTIN_LED, LOW);
 			Serial.println(" >> Turn off actuator");
 		}
 	}
@@ -200,6 +198,7 @@ void setup() {
 	pinMode(PH_PIN, INPUT);
 	pinMode(TURB_PIN, INPUT);
 	pinMode(ACTUATOR_PIN, OUTPUT);
+	digitalWrite(ACTUATOR_PIN, HIGH); // actuator turned off
 
 }
 
