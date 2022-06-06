@@ -1,25 +1,5 @@
 [
     {
-        "id": "3244455b14766eae",
-        "type": "tab",
-        "label": "Flow 1",
-        "disabled": false,
-        "info": "Test receive msg from MQTT",
-        "env": []
-    },
-    {
-        "id": "9ed50aa2a15971b2",
-        "type": "subflow",
-        "name": "sub1",
-        "info": "Send data from sensors with MQTT, then save it into DB.",
-        "category": "",
-        "in": [],
-        "out": [],
-        "env": [],
-        "meta": {},
-        "color": "#DDAA99"
-    },
-    {
         "id": "3dff45646994f545",
         "type": "subflow",
         "name": "sub2",
@@ -28,10 +8,10 @@
         "in": [
             {
                 "x": 60,
-                "y": 200,
+                "y": 180,
                 "wires": [
                     {
-                        "id": "deea5816191a2109"
+                        "id": "484298b326e6d1f0"
                     }
                 ]
             }
@@ -40,6 +20,403 @@
         "env": [],
         "meta": {},
         "color": "#DDAA99"
+    },
+    {
+        "id": "7d0256bec913f8f1",
+        "type": "comment",
+        "z": "3dff45646994f545",
+        "name": "Measure Fish Length",
+        "info": "Call run.py from folder project (fish-length-opencv)",
+        "x": 140,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "cccd0bd6399e4dc6",
+        "type": "function",
+        "z": "3dff45646994f545",
+        "name": "get_avg_fishlength()",
+        "func": "var data = msg.payload;\n\nvar avg_fishlength = data.result['avg_fishlength'];\n\nmsg.payload = avg_fishlength;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 140,
+        "y": 500,
+        "wires": [
+            [
+                "10e98cba05b274e1"
+            ]
+        ]
+    },
+    {
+        "id": "334d1844de15fb8d",
+        "type": "json",
+        "z": "3dff45646994f545",
+        "name": "result object",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 110,
+        "y": 440,
+        "wires": [
+            [
+                "cccd0bd6399e4dc6",
+                "40f23208c8e08fc2",
+                "38fed4db5483b4c5"
+            ]
+        ]
+    },
+    {
+        "id": "9a186e15f0eeeedf",
+        "type": "file in",
+        "z": "3dff45646994f545",
+        "name": "read result.json",
+        "filename": "/home/ma-pi/_myProjects/fish-length-opencv/tmp/result.json",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 240,
+        "y": 380,
+        "wires": [
+            [
+                "334d1844de15fb8d",
+                "eb504c4ae0eb5e39"
+            ]
+        ]
+    },
+    {
+        "id": "eb504c4ae0eb5e39",
+        "type": "debug",
+        "z": "3dff45646994f545",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 430,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "40f23208c8e08fc2",
+        "type": "function",
+        "z": "3dff45646994f545",
+        "name": "get_num_fish()",
+        "func": "var data = msg.payload;\n\nvar num_fish = data.result['num_fish'];\n\nmsg.payload = num_fish;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 120,
+        "y": 540,
+        "wires": [
+            [
+                "5f1b0437dbf06992"
+            ]
+        ]
+    },
+    {
+        "id": "38fed4db5483b4c5",
+        "type": "function",
+        "z": "3dff45646994f545",
+        "name": "get_datetime()",
+        "func": "var data = msg.payload;\n\nvar datetime = data.result['datetime'];\n\nmsg.payload = datetime;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 120,
+        "y": 580,
+        "wires": [
+            [
+                "49d968dbaf211fa3"
+            ]
+        ]
+    },
+    {
+        "id": "10e98cba05b274e1",
+        "type": "influxdb out",
+        "z": "3dff45646994f545",
+        "influxdb": "766bd7a5386acf81",
+        "name": "",
+        "measurement": "fishlength",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 430,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "5f1b0437dbf06992",
+        "type": "influxdb out",
+        "z": "3dff45646994f545",
+        "influxdb": "766bd7a5386acf81",
+        "name": "",
+        "measurement": "num_fish",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 430,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "49d968dbaf211fa3",
+        "type": "influxdb out",
+        "z": "3dff45646994f545",
+        "influxdb": "766bd7a5386acf81",
+        "name": "",
+        "measurement": "datetime",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 430,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "a24e15c512ea160f",
+        "type": "comment",
+        "z": "3dff45646994f545",
+        "name": "Upload Measurement Result to DB",
+        "info": "",
+        "x": 180,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "1350a9f8fadfe158",
+        "type": "comment",
+        "z": "3dff45646994f545",
+        "name": "Send Email contain Warer Quality and Final Image",
+        "info": "",
+        "x": 230,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "09f5f6e33e9a0ed4",
+        "type": "link in",
+        "z": "3dff45646994f545",
+        "name": "",
+        "links": [
+            "484298b326e6d1f0"
+        ],
+        "x": 55,
+        "y": 720,
+        "wires": [
+            [
+                "fd74774aba7269bb",
+                "7c896415e2c5d8bb"
+            ]
+        ]
+    },
+    {
+        "id": "1b2e156b9452612b",
+        "type": "link in",
+        "z": "3dff45646994f545",
+        "name": "",
+        "links": [
+            "484298b326e6d1f0"
+        ],
+        "x": 85,
+        "y": 380,
+        "wires": [
+            [
+                "9a186e15f0eeeedf"
+            ]
+        ]
+    },
+    {
+        "id": "fd74774aba7269bb",
+        "type": "influxdb in",
+        "z": "3dff45646994f545",
+        "influxdb": "766bd7a5386acf81",
+        "name": "last num_fish",
+        "query": "SELECT * FROM num_fish ORDER BY time DESC LIMIT 1",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "organisation",
+        "x": 190,
+        "y": 700,
+        "wires": [
+            [
+                "97e698a4b2a87d12"
+            ]
+        ]
+    },
+    {
+        "id": "e338a7eae49b05cc",
+        "type": "debug",
+        "z": "3dff45646994f545",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 550,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "af283c39b5813d54",
+        "type": "pythonshell in",
+        "z": "3dff45646994f545",
+        "name": "write_body.py",
+        "pyfile": "/home/ma-pi/_myProjects/iot-aquaculture/src/send_email/write_body.py",
+        "virtualenv": "",
+        "continuous": false,
+        "stdInData": false,
+        "x": 140,
+        "y": 800,
+        "wires": [
+            [
+                "a832e0df41a5f5fe"
+            ]
+        ]
+    },
+    {
+        "id": "97e698a4b2a87d12",
+        "type": "function",
+        "z": "3dff45646994f545",
+        "name": "get_value()",
+        "func": "var data = msg.payload;\n\nmsg.topic = 'num_fish';\nmsg.payload = data[0].value;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 700,
+        "wires": [
+            [
+                "f305e43b99083d69"
+            ]
+        ]
+    },
+    {
+        "id": "7c896415e2c5d8bb",
+        "type": "influxdb in",
+        "z": "3dff45646994f545",
+        "influxdb": "766bd7a5386acf81",
+        "name": "last fishlength",
+        "query": "SELECT * FROM fishlength ORDER BY time DESC LIMIT 1",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "organisation",
+        "x": 200,
+        "y": 740,
+        "wires": [
+            [
+                "ae42d41e7df92524"
+            ]
+        ]
+    },
+    {
+        "id": "ae42d41e7df92524",
+        "type": "function",
+        "z": "3dff45646994f545",
+        "name": "get_value()",
+        "func": "var data = msg.payload;\n\nmsg.topic = 'fishlength';\nmsg.payload = data[0].value;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 740,
+        "wires": [
+            [
+                "f305e43b99083d69"
+            ]
+        ]
+    },
+    {
+        "id": "f305e43b99083d69",
+        "type": "join",
+        "z": "3dff45646994f545",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "num",
+        "reduceFixup": "",
+        "x": 550,
+        "y": 720,
+        "wires": [
+            [
+                "af283c39b5813d54"
+            ]
+        ]
+    },
+    {
+        "id": "a832e0df41a5f5fe",
+        "type": "pythonshell in",
+        "z": "3dff45646994f545",
+        "name": "send_email.py",
+        "pyfile": "/home/ma-pi/_myProjects/iot-aquaculture/src/send_email/send_email.py",
+        "virtualenv": "",
+        "continuous": false,
+        "stdInData": false,
+        "x": 360,
+        "y": 800,
+        "wires": [
+            [
+                "e338a7eae49b05cc"
+            ]
+        ]
+    },
+    {
+        "id": "484298b326e6d1f0",
+        "type": "link out",
+        "z": "3dff45646994f545",
+        "name": "",
+        "mode": "link",
+        "links": [
+            "09f5f6e33e9a0ed4",
+            "1b2e156b9452612b"
+        ],
+        "x": 575,
+        "y": 180,
+        "wires": []
     },
     {
         "id": "7a41ed18e2f9d323",
@@ -67,7 +444,7 @@
         "out": [
             {
                 "x": 360,
-                "y": 680,
+                "y": 600,
                 "wires": [
                     {
                         "id": "66d004be3f6becb9",
@@ -79,635 +456,6 @@
         "env": [],
         "meta": {},
         "color": "#DDAA99"
-    },
-    {
-        "id": "1d413aa81ba2085f",
-        "type": "mqtt-broker",
-        "name": "HiveMQ Cloud",
-        "broker": "fb39fa06a52049ecac3a88801077b1b7.s2.eu.hivemq.cloud",
-        "port": "8883",
-        "tls": "",
-        "clientid": "",
-        "autoConnect": true,
-        "usetls": true,
-        "protocolVersion": "4",
-        "keepalive": "60",
-        "cleansession": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closeQos": "0",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willPayload": "",
-        "willMsg": {},
-        "sessionExpiry": ""
-    },
-    {
-        "id": "35299a07402c88ad",
-        "type": "mqtt-broker",
-        "name": "",
-        "broker": "test.mosquitto.org",
-        "port": "1883",
-        "clientid": "",
-        "autoConnect": true,
-        "usetls": false,
-        "protocolVersion": "4",
-        "keepalive": "60",
-        "cleansession": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closeQos": "0",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willPayload": "",
-        "willMsg": {},
-        "sessionExpiry": ""
-    },
-    {
-        "id": "766bd7a5386acf81",
-        "type": "influxdb",
-        "hostname": "127.0.0.1",
-        "port": "8086",
-        "protocol": "http",
-        "database": "aquaculture",
-        "name": "",
-        "usetls": false,
-        "tls": "",
-        "influxdbVersion": "1.x",
-        "url": "http://localhost:8086",
-        "rejectUnauthorized": true
-    },
-    {
-        "id": "8b9eaf51e949e6ef",
-        "type": "influxdb",
-        "hostname": "127.0.0.1",
-        "port": "8086",
-        "protocol": "http",
-        "database": "mytest",
-        "name": "",
-        "usetls": false,
-        "tls": "",
-        "influxdbVersion": "1.x",
-        "url": "http://localhost:8086",
-        "rejectUnauthorized": true
-    },
-    {
-        "id": "f68e27fb4ad9e515",
-        "type": "comment",
-        "z": "9ed50aa2a15971b2",
-        "name": "MQTT and InfluxDB",
-        "info": "Test receive msg from MQTT.\nThen upload it to InfluxDB.",
-        "x": 110,
-        "y": 100,
-        "wires": []
-    },
-    {
-        "id": "5f9fc934a58d1b2f",
-        "type": "mqtt in",
-        "z": "9ed50aa2a15971b2",
-        "name": "",
-        "topic": "ourSensorOut",
-        "qos": "2",
-        "datatype": "auto",
-        "broker": "35299a07402c88ad",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 90,
-        "y": 180,
-        "wires": [
-            [
-                "c281074e085c9a38",
-                "509d9c450cd6eecb",
-                "02be9be7394992eb",
-                "043d152382f13913"
-            ]
-        ]
-    },
-    {
-        "id": "741fee405b03dc7e",
-        "type": "influxdb out",
-        "z": "9ed50aa2a15971b2",
-        "influxdb": "766bd7a5386acf81",
-        "name": "",
-        "measurement": "temperature",
-        "precision": "",
-        "retentionPolicy": "",
-        "database": "database",
-        "precisionV18FluxV20": "ms",
-        "retentionPolicyV18Flux": "",
-        "org": "organisation",
-        "bucket": "bucket",
-        "x": 620,
-        "y": 220,
-        "wires": []
-    },
-    {
-        "id": "c281074e085c9a38",
-        "type": "function",
-        "z": "9ed50aa2a15971b2",
-        "name": "get_temperature()",
-        "func": "var data = msg.payload;\ndata = data.split(\",\");\n\nvar temp = parseFloat(data[0]);\n\nmsg.payload = temp;\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 310,
-        "y": 220,
-        "wires": [
-            [
-                "741fee405b03dc7e"
-            ]
-        ]
-    },
-    {
-        "id": "509d9c450cd6eecb",
-        "type": "function",
-        "z": "9ed50aa2a15971b2",
-        "name": "get_turbidity()",
-        "func": "var data = msg.payload;\ndata = data.split(\",\");\n\nvar turbidity = parseFloat(data[1]);\n\nmsg.payload = turbidity;\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 300,
-        "y": 260,
-        "wires": [
-            [
-                "2f0eadc164c21d64"
-            ]
-        ]
-    },
-    {
-        "id": "2f0eadc164c21d64",
-        "type": "influxdb out",
-        "z": "9ed50aa2a15971b2",
-        "influxdb": "766bd7a5386acf81",
-        "name": "",
-        "measurement": "turbidity",
-        "precision": "",
-        "retentionPolicy": "",
-        "database": "database",
-        "precisionV18FluxV20": "ms",
-        "retentionPolicyV18Flux": "",
-        "org": "organisation",
-        "bucket": "bucket",
-        "x": 600,
-        "y": 260,
-        "wires": []
-    },
-    {
-        "id": "02be9be7394992eb",
-        "type": "debug",
-        "z": "9ed50aa2a15971b2",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 290,
-        "y": 180,
-        "wires": []
-    },
-    {
-        "id": "043d152382f13913",
-        "type": "function",
-        "z": "9ed50aa2a15971b2",
-        "name": "get_pH()",
-        "func": "var data = msg.payload;\ndata = data.split(\",\");\n\nvar pH = parseFloat(data[2]);\n\nmsg.payload = pH;\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 280,
-        "y": 300,
-        "wires": [
-            [
-                "df2661a17bf3daef"
-            ]
-        ]
-    },
-    {
-        "id": "df2661a17bf3daef",
-        "type": "influxdb out",
-        "z": "9ed50aa2a15971b2",
-        "influxdb": "766bd7a5386acf81",
-        "name": "",
-        "measurement": "pH",
-        "precision": "",
-        "retentionPolicy": "",
-        "database": "database",
-        "precisionV18FluxV20": "ms",
-        "retentionPolicyV18Flux": "",
-        "org": "organisation",
-        "bucket": "bucket",
-        "x": 590,
-        "y": 300,
-        "wires": []
-    },
-    {
-        "id": "7d0256bec913f8f1",
-        "type": "comment",
-        "z": "3dff45646994f545",
-        "name": "Measure Fish Length",
-        "info": "Call run.py from folder project (fish-length-opencv)",
-        "x": 140,
-        "y": 140,
-        "wires": []
-    },
-    {
-        "id": "deea5816191a2109",
-        "type": "pythonshell in",
-        "z": "3dff45646994f545",
-        "name": "camera.py",
-        "pyfile": "/home/ma-pi/_myProjects/iot-aquaculture/src/camera.py",
-        "virtualenv": "",
-        "continuous": false,
-        "stdInData": false,
-        "x": 210,
-        "y": 200,
-        "wires": [
-            [
-                "dfb8c02d1ed45fa1",
-                "43c09270b34507c8"
-            ]
-        ]
-    },
-    {
-        "id": "cccd0bd6399e4dc6",
-        "type": "function",
-        "z": "3dff45646994f545",
-        "name": "get_avg_fishlength()",
-        "func": "var data = msg.payload;\n\nvar avg_fishlength = data.result['avg_fishlength'];\n\nmsg.payload = avg_fishlength;\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 140,
-        "y": 600,
-        "wires": [
-            [
-                "10e98cba05b274e1"
-            ]
-        ]
-    },
-    {
-        "id": "334d1844de15fb8d",
-        "type": "json",
-        "z": "3dff45646994f545",
-        "name": "result object",
-        "property": "payload",
-        "action": "",
-        "pretty": false,
-        "x": 110,
-        "y": 520,
-        "wires": [
-            [
-                "cccd0bd6399e4dc6",
-                "40f23208c8e08fc2",
-                "38fed4db5483b4c5"
-            ]
-        ]
-    },
-    {
-        "id": "9a186e15f0eeeedf",
-        "type": "file in",
-        "z": "3dff45646994f545",
-        "name": "read result.json",
-        "filename": "/home/ma-pi/_myProjects/fish-length-opencv/tmp/result.json",
-        "format": "utf8",
-        "chunk": false,
-        "sendError": false,
-        "encoding": "none",
-        "allProps": false,
-        "x": 240,
-        "y": 460,
-        "wires": [
-            [
-                "334d1844de15fb8d",
-                "eb504c4ae0eb5e39"
-            ]
-        ]
-    },
-    {
-        "id": "eb504c4ae0eb5e39",
-        "type": "debug",
-        "z": "3dff45646994f545",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 430,
-        "y": 460,
-        "wires": []
-    },
-    {
-        "id": "40f23208c8e08fc2",
-        "type": "function",
-        "z": "3dff45646994f545",
-        "name": "get_num_fish()",
-        "func": "var data = msg.payload;\n\nvar num_fish = data.result['num_fish'];\n\nmsg.payload = num_fish;\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 120,
-        "y": 640,
-        "wires": [
-            [
-                "5f1b0437dbf06992"
-            ]
-        ]
-    },
-    {
-        "id": "38fed4db5483b4c5",
-        "type": "function",
-        "z": "3dff45646994f545",
-        "name": "get_datetime()",
-        "func": "var data = msg.payload;\n\nvar datetime = data.result['datetime'];\n\nmsg.payload = datetime;\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 120,
-        "y": 680,
-        "wires": [
-            [
-                "49d968dbaf211fa3"
-            ]
-        ]
-    },
-    {
-        "id": "10e98cba05b274e1",
-        "type": "influxdb out",
-        "z": "3dff45646994f545",
-        "influxdb": "766bd7a5386acf81",
-        "name": "",
-        "measurement": "fishlength",
-        "precision": "",
-        "retentionPolicy": "",
-        "database": "database",
-        "precisionV18FluxV20": "ms",
-        "retentionPolicyV18Flux": "",
-        "org": "organisation",
-        "bucket": "bucket",
-        "x": 470,
-        "y": 600,
-        "wires": []
-    },
-    {
-        "id": "5f1b0437dbf06992",
-        "type": "influxdb out",
-        "z": "3dff45646994f545",
-        "influxdb": "766bd7a5386acf81",
-        "name": "",
-        "measurement": "num_fish",
-        "precision": "",
-        "retentionPolicy": "",
-        "database": "database",
-        "precisionV18FluxV20": "ms",
-        "retentionPolicyV18Flux": "",
-        "org": "organisation",
-        "bucket": "bucket",
-        "x": 470,
-        "y": 640,
-        "wires": []
-    },
-    {
-        "id": "49d968dbaf211fa3",
-        "type": "influxdb out",
-        "z": "3dff45646994f545",
-        "influxdb": "766bd7a5386acf81",
-        "name": "",
-        "measurement": "datetime",
-        "precision": "",
-        "retentionPolicy": "",
-        "database": "database",
-        "precisionV18FluxV20": "ms",
-        "retentionPolicyV18Flux": "",
-        "org": "organisation",
-        "bucket": "bucket",
-        "x": 470,
-        "y": 680,
-        "wires": []
-    },
-    {
-        "id": "dfb8c02d1ed45fa1",
-        "type": "debug",
-        "z": "3dff45646994f545",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 190,
-        "y": 260,
-        "wires": []
-    },
-    {
-        "id": "a24e15c512ea160f",
-        "type": "comment",
-        "z": "3dff45646994f545",
-        "name": "Upload Measurement Result to DB",
-        "info": "",
-        "x": 180,
-        "y": 400,
-        "wires": []
-    },
-    {
-        "id": "1350a9f8fadfe158",
-        "type": "comment",
-        "z": "3dff45646994f545",
-        "name": "Send Email contain Warer Quality and Final Image",
-        "info": "",
-        "x": 230,
-        "y": 820,
-        "wires": []
-    },
-    {
-        "id": "1219660d7b4150c0",
-        "type": "pythonshell in",
-        "z": "3dff45646994f545",
-        "name": "send_email.py",
-        "pyfile": "/home/ma-pi/_myProjects/iot-aquaculture/src/send_email/send_email.py",
-        "virtualenv": "",
-        "continuous": false,
-        "stdInData": false,
-        "x": 260,
-        "y": 880,
-        "wires": [
-            [
-                "80841e52bbc623b5"
-            ]
-        ]
-    },
-    {
-        "id": "80841e52bbc623b5",
-        "type": "debug",
-        "z": "3dff45646994f545",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 470,
-        "y": 880,
-        "wires": []
-    },
-    {
-        "id": "484298b326e6d1f0",
-        "type": "link out",
-        "z": "3dff45646994f545",
-        "name": "",
-        "mode": "link",
-        "links": [
-            "09f5f6e33e9a0ed4",
-            "1b2e156b9452612b"
-        ],
-        "x": 475,
-        "y": 280,
-        "wires": []
-    },
-    {
-        "id": "09f5f6e33e9a0ed4",
-        "type": "link in",
-        "z": "3dff45646994f545",
-        "name": "",
-        "links": [
-            "484298b326e6d1f0"
-        ],
-        "x": 95,
-        "y": 880,
-        "wires": [
-            [
-                "1219660d7b4150c0"
-            ]
-        ]
-    },
-    {
-        "id": "1b2e156b9452612b",
-        "type": "link in",
-        "z": "3dff45646994f545",
-        "name": "",
-        "links": [
-            "484298b326e6d1f0"
-        ],
-        "x": 85,
-        "y": 460,
-        "wires": [
-            [
-                "9a186e15f0eeeedf"
-            ]
-        ]
-    },
-    {
-        "id": "a42f0f89d479b51e",
-        "type": "debug",
-        "z": "3dff45646994f545",
-        "name": "return",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 510,
-        "y": 240,
-        "wires": []
-    },
-    {
-        "id": "43c09270b34507c8",
-        "type": "exec",
-        "z": "3dff45646994f545",
-        "command": "cd ./_myProjects/fish-length-opencv/ && python run.py",
-        "addpay": "",
-        "append": "",
-        "useSpawn": "false",
-        "timer": "",
-        "winHide": false,
-        "oldrc": false,
-        "name": "run.py",
-        "x": 390,
-        "y": 200,
-        "wires": [
-            [
-                "a01764648dc16090"
-            ],
-            [
-                "67c083b075c4f048"
-            ],
-            [
-                "a42f0f89d479b51e",
-                "484298b326e6d1f0"
-            ]
-        ]
-    },
-    {
-        "id": "a01764648dc16090",
-        "type": "debug",
-        "z": "3dff45646994f545",
-        "name": "stdout",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 510,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "67c083b075c4f048",
-        "type": "debug",
-        "z": "3dff45646994f545",
-        "name": "error",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 510,
-        "y": 200,
-        "wires": []
     },
     {
         "id": "aad7cb0cdcf553bf",
@@ -902,7 +650,8 @@
         "y": 420,
         "wires": [
             [
-                "66143280e9f9a3d0"
+                "66143280e9f9a3d0",
+                "6e4df4939d6460e4"
             ]
         ]
     },
@@ -928,7 +677,7 @@
             "66143280e9f9a3d0"
         ],
         "x": 55,
-        "y": 620,
+        "y": 580,
         "wires": [
             [
                 "66d004be3f6becb9"
@@ -977,7 +726,8 @@
         "y": 380,
         "wires": [
             [
-                "c075788263d9029a"
+                "c075788263d9029a",
+                "12a62eb5cb0293fe"
             ]
         ]
     },
@@ -998,7 +748,7 @@
         "name": "Check Limit (1: out of limit range)",
         "info": "",
         "x": 170,
-        "y": 580,
+        "y": 540,
         "wires": []
     },
     {
@@ -1006,17 +756,18 @@
         "type": "function",
         "z": "7a41ed18e2f9d323",
         "name": "check_limit()",
-        "func": "var obj = msg.payload;\n\nfunction check_limit(obj){\n    const keys = Object.keys(obj);\n    const measurements = Object.keys( obj[keys[0]] );\n\n    for (var i=0; i < keys.length; i++ ){\n        var value = obj[keys[0]][measurements[i]]['value'];\n        var upper = obj[keys[1]][measurements[i]]['upper'];\n        var lower = obj[keys[1]][measurements[i]]['lower'];\n\n        if (value < lower || value > upper){\n            return 1;    // out of limit range\n        }\n    }\n    \n    return 0;    // in limit range\n}\n\nmsg.payload = check_limit(obj);\n\nreturn msg;",
+        "func": "var obj = msg.payload;\n\nfunction check_limit(obj){\n    const keys = Object.keys(obj);\n    const measurements = Object.keys( obj[keys[0]] );\n\n    for (var i=0; i < keys.length; i++ ){\n        var value = obj[keys[0]][measurements[i]]['value'];\n        var upper = obj[keys[1]][measurements[i]]['upper'];\n        var lower = obj[keys[1]][measurements[i]]['lower'];\n\n        if (value < lower || value > upper){\n            msg.topic = measurements[i] + ': ' + value + ' not in [' + lower + ', ' + upper + ']';\n            return '1';    // out of limit range\n        }\n    }\n    msg.topic = 'all good'\n    return '0';    // in limit range\n}\n\nmsg.payload = check_limit(obj);\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 190,
-        "y": 620,
+        "y": 580,
         "wires": [
             [
-                "5dc4faf325facd17"
+                "5dc4faf325facd17",
+                "23938675296b8e2b"
             ]
         ]
     },
@@ -1025,8 +776,8 @@
         "type": "influxdb in",
         "z": "7a41ed18e2f9d323",
         "influxdb": "766bd7a5386acf81",
-        "name": "avg_temperature in last 5m",
-        "query": "SELECT * FROM temperature WHERE time > now() - 5m",
+        "name": "avg_temperature in last 3m",
+        "query": "SELECT * FROM temperature WHERE time > now() - 3m",
         "rawOutput": false,
         "precision": "",
         "retentionPolicy": "",
@@ -1044,8 +795,8 @@
         "type": "influxdb in",
         "z": "7a41ed18e2f9d323",
         "influxdb": "766bd7a5386acf81",
-        "name": "avg_turbidity in last 5m",
-        "query": "SELECT * FROM turbidity WHERE time > now() - 5m",
+        "name": "avg_turbidity in last 3m",
+        "query": "SELECT * FROM turbidity WHERE time > now() - 3m",
         "rawOutput": false,
         "precision": "",
         "retentionPolicy": "",
@@ -1063,8 +814,8 @@
         "type": "influxdb in",
         "z": "7a41ed18e2f9d323",
         "influxdb": "766bd7a5386acf81",
-        "name": "avg_pH in last 5m",
-        "query": "SELECT * FROM pH WHERE time > now() - 5m",
+        "name": "avg_pH in last 3m",
+        "query": "SELECT * FROM pH WHERE time > now() - 3m",
         "rawOutput": false,
         "precision": "",
         "retentionPolicy": "",
@@ -1111,8 +862,319 @@
         "expiry": "",
         "broker": "35299a07402c88ad",
         "x": 410,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "12a62eb5cb0293fe",
+        "type": "file",
+        "z": "7a41ed18e2f9d323",
+        "name": "write data.json",
+        "filename": "/home/ma-pi/_myProjects/iot-aquaculture/tmp/data.json",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 440,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6e4df4939d6460e4",
+        "type": "debug",
+        "z": "7a41ed18e2f9d323",
+        "d": true,
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "23938675296b8e2b",
+        "type": "debug",
+        "z": "7a41ed18e2f9d323",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "topic",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 180,
         "y": 620,
         "wires": []
+    },
+    {
+        "id": "dcaa0eb99b7f55cc",
+        "type": "mqtt in",
+        "z": "7a41ed18e2f9d323",
+        "name": "",
+        "topic": "ourSensorIn",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "35299a07402c88ad",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 110,
+        "y": 660,
+        "wires": [
+            [
+                "d067b5d2e3d5e443"
+            ]
+        ]
+    },
+    {
+        "id": "d067b5d2e3d5e443",
+        "type": "debug",
+        "z": "7a41ed18e2f9d323",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 290,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "9ed50aa2a15971b2",
+        "type": "subflow",
+        "name": "sub1",
+        "info": "Send data from sensors with MQTT, then save it into DB.",
+        "category": "",
+        "in": [],
+        "out": [],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "f68e27fb4ad9e515",
+        "type": "comment",
+        "z": "9ed50aa2a15971b2",
+        "name": "MQTT and InfluxDB",
+        "info": "Test receive msg from MQTT.\nThen upload it to InfluxDB.",
+        "x": 110,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "5f9fc934a58d1b2f",
+        "type": "mqtt in",
+        "z": "9ed50aa2a15971b2",
+        "name": "",
+        "topic": "ourSensorOut",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "35299a07402c88ad",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 90,
+        "y": 180,
+        "wires": [
+            [
+                "c281074e085c9a38",
+                "509d9c450cd6eecb",
+                "02be9be7394992eb",
+                "043d152382f13913"
+            ]
+        ]
+    },
+    {
+        "id": "741fee405b03dc7e",
+        "type": "influxdb out",
+        "z": "9ed50aa2a15971b2",
+        "influxdb": "766bd7a5386acf81",
+        "name": "",
+        "measurement": "temperature",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 620,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "c281074e085c9a38",
+        "type": "function",
+        "z": "9ed50aa2a15971b2",
+        "name": "get_temperature()",
+        "func": "var data = msg.payload;\ndata = data.split(\",\");\n\nvar temp = parseFloat(data[0]);\n\nmsg.payload = temp;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 220,
+        "wires": [
+            [
+                "741fee405b03dc7e"
+            ]
+        ]
+    },
+    {
+        "id": "509d9c450cd6eecb",
+        "type": "function",
+        "z": "9ed50aa2a15971b2",
+        "name": "get_turbidity()",
+        "func": "var data = msg.payload;\ndata = data.split(\",\");\n\nvar turbidity = parseFloat(data[2]);\n\nmsg.payload = turbidity;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 300,
+        "wires": [
+            [
+                "2f0eadc164c21d64"
+            ]
+        ]
+    },
+    {
+        "id": "2f0eadc164c21d64",
+        "type": "influxdb out",
+        "z": "9ed50aa2a15971b2",
+        "influxdb": "766bd7a5386acf81",
+        "name": "",
+        "measurement": "turbidity",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 600,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "02be9be7394992eb",
+        "type": "debug",
+        "z": "9ed50aa2a15971b2",
+        "d": true,
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 290,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "043d152382f13913",
+        "type": "function",
+        "z": "9ed50aa2a15971b2",
+        "name": "get_pH()",
+        "func": "var data = msg.payload;\ndata = data.split(\",\");\n\nvar pH = parseFloat(data[1]);\n\nmsg.payload = pH;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 260,
+        "wires": [
+            [
+                "df2661a17bf3daef"
+            ]
+        ]
+    },
+    {
+        "id": "df2661a17bf3daef",
+        "type": "influxdb out",
+        "z": "9ed50aa2a15971b2",
+        "influxdb": "766bd7a5386acf81",
+        "name": "",
+        "measurement": "pH",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 590,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "35299a07402c88ad",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "test.mosquitto.org",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
+        "id": "766bd7a5386acf81",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "aquaculture",
+        "name": "",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x",
+        "url": "http://localhost:8086",
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "3244455b14766eae",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "Test receive msg from MQTT",
+        "env": []
     },
     {
         "id": "d52b3abffc66bae0",
@@ -1144,19 +1206,10 @@
         "wires": []
     },
     {
-        "id": "4ad90681186e79f0",
-        "type": "subflow:3dff45646994f545",
-        "z": "3244455b14766eae",
-        "name": "",
-        "x": 350,
-        "y": 360,
-        "wires": []
-    },
-    {
         "id": "0c3a0a681bda74d0",
         "type": "inject",
         "z": "3244455b14766eae",
-        "name": "",
+        "name": "Every 9 o'clock",
         "props": [
             {
                 "p": "payload"
@@ -1167,18 +1220,18 @@
             }
         ],
         "repeat": "",
-        "crontab": "",
+        "crontab": "00 09 * * *",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 140,
-        "y": 360,
+        "payload": "This process may take 3-5 minutes.",
+        "payloadType": "str",
+        "x": 160,
+        "y": 420,
         "wires": [
             [
-                "4ad90681186e79f0",
-                "587694592742128c"
+                "587694592742128c",
+                "df1446bc2d73e55f"
             ]
         ]
     },
@@ -1194,8 +1247,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 370,
-        "y": 400,
+        "x": 390,
+        "y": 420,
         "wires": []
     },
     {
@@ -1204,10 +1257,10 @@
         "z": "3244455b14766eae",
         "name": "",
         "x": 310,
-        "y": 540,
+        "y": 780,
         "wires": [
             [
-                "b20fa9cde4ac6a2b"
+                "43ed640ebde4a650"
             ]
         ]
     },
@@ -1233,7 +1286,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 150,
-        "y": 540,
+        "y": 780,
         "wires": [
             [
                 "dd6343f69edc90c7"
@@ -1245,9 +1298,9 @@
         "type": "comment",
         "z": "3244455b14766eae",
         "name": "Check Data in Last 5 Minutes (1: out of limit range)",
-        "info": "Return 1 if value out of limit range.",
+        "info": "Return 1 if value out of limit range.\n\nSend it to ESP8266 to control electric valve.",
         "x": 250,
-        "y": 500,
+        "y": 740,
         "wires": []
     },
     {
@@ -1262,8 +1315,248 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 470,
-        "y": 540,
+        "x": 630,
+        "y": 780,
         "wires": []
+    },
+    {
+        "id": "43ed640ebde4a650",
+        "type": "rbe",
+        "z": "3244455b14766eae",
+        "name": "",
+        "func": "rbei",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "septopics": true,
+        "property": "payload",
+        "topi": "topic",
+        "x": 470,
+        "y": 780,
+        "wires": [
+            [
+                "b20fa9cde4ac6a2b"
+            ]
+        ]
+    },
+    {
+        "id": "833cfbcc5d80cef6",
+        "type": "inject",
+        "z": "3244455b14766eae",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "This process may take 3-5 minutes.",
+        "payloadType": "str",
+        "x": 110,
+        "y": 660,
+        "wires": [
+            [
+                "a8a69ea518c689f2"
+            ]
+        ]
+    },
+    {
+        "id": "5c657cd215dc2c7d",
+        "type": "debug",
+        "z": "3244455b14766eae",
+        "name": "return",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "f01ddd85538765d5",
+        "type": "exec",
+        "z": "3244455b14766eae",
+        "command": "cd && cd ./_myProjects/fish-length-opencv/ && python run.py && cd",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "run.py",
+        "x": 470,
+        "y": 560,
+        "wires": [
+            [
+                "9e19738e63da4b37"
+            ],
+            [
+                "27052ed38fccd8ef"
+            ],
+            [
+                "5c657cd215dc2c7d",
+                "d75aa166edf2bdc3"
+            ]
+        ]
+    },
+    {
+        "id": "9e19738e63da4b37",
+        "type": "debug",
+        "z": "3244455b14766eae",
+        "name": "stdout",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "27052ed38fccd8ef",
+        "type": "debug",
+        "z": "3244455b14766eae",
+        "name": "error",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "df1446bc2d73e55f",
+        "type": "exec",
+        "z": "3244455b14766eae",
+        "command": "cd && cd ./_myProjects/iot-aquaculture/src/ && python camera.py && cd",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "camera.py",
+        "x": 170,
+        "y": 520,
+        "wires": [
+            [
+                "b0ce75c07a562277"
+            ],
+            [
+                "39475dad1ed57291"
+            ],
+            [
+                "75e2938ff6d3e4e9",
+                "f01ddd85538765d5"
+            ]
+        ]
+    },
+    {
+        "id": "75e2938ff6d3e4e9",
+        "type": "debug",
+        "z": "3244455b14766eae",
+        "name": "return",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 310,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "b0ce75c07a562277",
+        "type": "debug",
+        "z": "3244455b14766eae",
+        "name": "stdout",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 310,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "39475dad1ed57291",
+        "type": "debug",
+        "z": "3244455b14766eae",
+        "name": "error",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 310,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "d75aa166edf2bdc3",
+        "type": "subflow:3dff45646994f545",
+        "z": "3244455b14766eae",
+        "name": "",
+        "x": 590,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "a8a69ea518c689f2",
+        "type": "delay",
+        "z": "3244455b14766eae",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 260,
+        "y": 660,
+        "wires": [
+            [
+                "df1446bc2d73e55f",
+                "587694592742128c"
+            ]
+        ]
     }
 ]
